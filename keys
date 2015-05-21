@@ -9,7 +9,7 @@ keys_del() {
 	for arg
 	do
 		cmds="$cmds $((arg))d;"
-		: $((num_lines++))
+		num_lines=$((num_lines+1))
 	done
 
 	if [ $num_lines -eq 0 ]
