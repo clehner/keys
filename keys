@@ -42,6 +42,11 @@ keys_help() {
 }
 
 cmd="$1"
+if [ -z "$cmd" ]; then
+	keys_help
+	exit
+fi
+
 shift
 case "$cmd" in
 	list) keys_list $@;;
