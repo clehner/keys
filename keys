@@ -14,7 +14,7 @@ keys_del() {
 
 	if [ $num_lines -eq 0 ]
 	then
-		echo "Usage: $(basename $0) [key_num...]" >&2
+		echo "Usage: $prog del [key_num...]" >&2
 		exit 1
 	fi
 
@@ -23,8 +23,7 @@ keys_del() {
 }
 
 keys_add() {
-	echo 'Enter ssh keys, one per line:' >&2
-	lines=$(tee -a ~/.ssh/authorized_keys | sed '/^$/d' | wc -l)
+	lines=$(tee -a ~/.ssh/authorized_keys | sed '/ /!d' | wc -l)
 	echo Added $lines keys
 }
 
@@ -36,18 +35,18 @@ keys_help() {
 	cat <<-EOF
 	Usage: $prog <command> [options]
 	Commands:
+	    list    List ssh authorized keys
 	    add     Add ssh authorized keys (one per line)
 	    del     Delete ssh authorized keys (by line numbers)
-	    list    List ssh authorized keys
 	EOF
 }
 
 cmd="$1"
 shift
 case "$cmd" in
-	del) keys_del $@;;
-	add) keys_add $@;;
 	list) keys_list $@;;
+	add) keys_add $@;;
+	del) keys_del $@;;
 	help) keys_help;;
 	*) keys_help >&2 && exit 1;;
 esac
