@@ -1,0 +1,53 @@
+#!/bin/sh
+
+prog="$(basename "$0")"
+
+keys_del() {
+	cmds=
+	num_lines=0
+	
+	for arg
+	do
+		cmds="$cmds $((arg))d;"
+		: $((num_lines++))
+	done
+
+	if [ $num_lines -eq 0 ]
+	then
+		echo "Usage: $(basename $0) [key_num...]" >&2
+		exit 1
+	fi
+
+	sed -i~ "$cmds" ~/.ssh/authorized_keys && \
+		echo "Deleted $num_lines keys"
+}
+
+keys_add() {
+	echo 'Enter ssh keys, one per line:' >&2
+	lines=$(tee -a ~/.ssh/authorized_keys | sed '/^$/d' | wc -l)
+	echo Added $lines keys
+}
+
+keys_list() {
+	sed = ~/.ssh/authorized_keys | sed 'N;s/\n/. /'
+}
+
+keys_help() {
+	cat <<-EOF
+	Usage: $prog <command> [options]
+	Commands:
+	    add     Add ssh authorized keys (one per line)
+	    del     Delete ssh authorized keys (by line numbers)
+	    list    List ssh authorized keys
+	EOF
+}
+
+cmd="$1"
+shift
+case "$cmd" in
+	del) keys_del $@;;
+	add) keys_add $@;;
+	list) keys_list $@;;
+	help) keys_help;;
+	*) keys_help >&2 && exit 1;;
+esac

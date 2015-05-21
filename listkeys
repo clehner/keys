@@ -1,2 +1,0 @@
-#!/bin/sh
-sed = ~/.ssh/authorized_keys | sed 'N;s/\n/. /'

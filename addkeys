@@ -1,4 +1,0 @@
-#!/bin/sh
-echo 'Enter ssh keys, one per line:' >&2
-lines=$(tee -a ~/.ssh/authorized_keys | sed '/^$/d' | wc -l)
-echo Added $lines keys
