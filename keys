@@ -4,23 +4,19 @@ prog="$(basename "$0")"
 keyfile=~/.ssh/authorized_keys
 
 keys_del() {
-	cmds=
-	num_lines=0
+	local cmds=
 	
-	for arg
-	do
+	for arg; do
 		cmds="$cmds $((arg))d;"
-		num_lines=$((num_lines+1))
 	done
 
-	if [ $num_lines -eq 0 ]
-	then
+	if [ $# -eq 0 ]; then
 		echo "Usage: $prog del [key_num...]" >&2
 		exit 1
 	fi
 
 	sed -i~ "$cmds" "$keyfile" && \
-		echo "Deleted $num_lines keys"
+		echo "Deleted $# keys"
 }
 
 keys_add() {
