@@ -1,6 +1,7 @@
 #!/bin/sh
 
 prog="$(basename "$0")"
+keyfile=~/.ssh/authorized_keys
 
 keys_del() {
 	cmds=
@@ -18,17 +19,17 @@ keys_del() {
 		exit 1
 	fi
 
-	sed -i~ "$cmds" ~/.ssh/authorized_keys && \
+	sed -i~ "$cmds" "$keyfile" && \
 		echo "Deleted $num_lines keys"
 }
 
 keys_add() {
-	lines=$(cat $@ | sed '/ /!d' | tee -a ~/.ssh/authorized_keys | wc -l)
+	lines=$(cat $@ | sed '/ /!d' | tee -a "$keyfile" | wc -l)
 	echo Added $lines keys
 }
 
 keys_list() {
-	sed = ~/.ssh/authorized_keys | sed 'N;s/\n/. /'
+	sed = "$keyfile" | sed 'N;s/\n/. /'
 }
 
 keys_help() {
