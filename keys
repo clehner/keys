@@ -23,7 +23,7 @@ keys_del() {
 }
 
 keys_add() {
-	lines=$(tee -a ~/.ssh/authorized_keys | sed '/ /!d' | wc -l)
+	lines=$(cat $@ | sed '/ /!d' | tee -a ~/.ssh/authorized_keys | wc -l)
 	echo Added $lines keys
 }
 
